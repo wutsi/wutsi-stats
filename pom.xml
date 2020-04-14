@@ -62,15 +62,21 @@
         </dependency>
     </dependencies>
 
-
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub Maven Packages</name>
-            <url>https://maven.pkg.github.com/wutsi/wutsi-extractor</url>
+            <url>https://maven.pkg.github.com/wutsi/wutsi-core-aws</url>
         </repository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>github-wutsi-core</id>
+            <url>https://maven.pkg.github.com/wutsi/wutsi-core</url>
+        </repository>
+    </repositories>
+    
     <build>
         <extensions>
             <extension>

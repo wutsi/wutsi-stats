@@ -6,7 +6,7 @@
 
     <servers>
         <server>
-            <id>github</id>
+            <id>github-core</id>
             <username>wutsi</username>
             <password>${GITHUB_TOKEN}</password>
         </server>
