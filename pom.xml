@@ -66,7 +66,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Maven Packages</name>
-            <url>https://maven.pkg.github.com/wutsi/wutsi-core-aws</url>
+            <url>https://maven.pkg.github.com/wutsi/wutsi-core-stats</url>
         </repository>
     </distributionManagement>
 
@@ -76,7 +76,7 @@
             <url>https://maven.pkg.github.com/wutsi/wutsi-core</url>
         </repository>
     </repositories>
-    
+
     <build>
         <extensions>
             <extension>
