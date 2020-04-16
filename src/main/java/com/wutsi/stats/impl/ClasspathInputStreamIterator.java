@@ -28,4 +28,8 @@ public class ClasspathInputStreamIterator implements InputStreamIterator {
             return null;
         }
     }
+
+    public boolean hasNext() {
+        return this.iterator.hasNext();
+    }
 }
