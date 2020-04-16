@@ -1,34 +1,101 @@
 package com.wutsi.stats.viewers;
 
+import com.github.difflib.DiffUtils;
+import com.github.difflib.patch.Patch;
 import com.wutsi.stats.InputStreamIterator;
 import com.wutsi.stats.impl.ClasspathInputStreamIterator;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DailyViewersAggregatorTest {
     DailyViewersAggregator aggregator;
 
     @Test
-    public void aggregate() throws Exception {
-        // GIVEN
-        InputStreamIterator iterator = createIterator("/tracks/2020-04-14-000.csv", "/tracks/2020-04-14-001.csv");
-        OutputStream out = new ByteArrayOutputStream();
+    public void happyPath() throws Exception {
+        test(
+                "/tracks/viewers/happy-path/2020-04-14-output.csv",
+                "/tracks/viewers/happy-path/2020-04-14-000.csv",
+                "/tracks/viewers/happy-path/2020-04-14-001.csv"
+        );
+    }
+
+    /**
+     * Make sure that we do not process bot events
+     */
+    @Test
+    public void bot() throws Exception {
+        test(
+                "/tracks/viewers/bot/2020-04-14-output.csv",
+                "/tracks/viewers/bot/2020-04-14-000.csv",
+                "/tracks/viewers/bot/2020-04-14-001.csv"
+        );
+    }
+
+    /**
+     * Make sure that we only process events associated with the provided date
+     */
+    @Test
+    public void date() throws Exception {
+        test(
+                "/tracks/viewers/date/2020-04-14-output.csv",
+                "/tracks/viewers/date/2020-04-14-000.csv",
+                "/tracks/viewers/date/2020-04-14-001.csv",
+                "/tracks/viewers/date/2020-04-15-000.csv"
+        );
+    }
+
+    /**
+     * Make sure that we only process events associated with page=page.read
+     */
+    @Test
+    public void page() throws Exception {
+        test(
+                "/tracks/viewers/page/2020-04-14-output.csv",
+                "/tracks/viewers/page/2020-04-14-000.csv",
+                "/tracks/viewers/page/2020-04-14-001.csv"
+        );
+    }
+
+    private void test(String expectedPath, String...paths) throws Exception {
+        InputStreamIterator iterator = createIterator(paths);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         // WHEN
         aggregator = new DailyViewersAggregator(LocalDate.parse("2020-04-14"));
         aggregator.aggregate(iterator, out);
 
         // THEN
-        String result = out.toString();
-        assertEquals("Hello world", result);
+        InputStream expected = getClass().getResourceAsStream(expectedPath);
+        assertCsvMatches(expected, new ByteArrayInputStream(out.toByteArray()));
     }
 
+    private void assertCsvMatches(InputStream expected, InputStream value) throws Exception {
+        Patch<String> patch = DiffUtils.diff(
+                toLines(value),
+                toLines(expected)
+        );
+        System.out.println("Delta: " + patch.getDeltas());
+        assertTrue(patch.getDeltas().isEmpty());
+    }
+
+    private List<String> toLines(InputStream in) throws IOException {
+        return Arrays.asList(IOUtils.toString(in).split("\\r?\\n"))
+                .stream()
+                .filter(it -> !it.isEmpty())
+                .map(it -> it + "\n")
+                .collect(Collectors.toList());
+    }
 
     private InputStreamIterator createIterator(String...paths) {
         return new ClasspathInputStreamIterator(Arrays.asList(paths));

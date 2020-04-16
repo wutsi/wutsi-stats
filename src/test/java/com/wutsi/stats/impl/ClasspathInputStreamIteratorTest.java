@@ -14,8 +14,8 @@ public class ClasspathInputStreamIteratorTest {
     public void next() throws Exception {
         InputStreamIterator it = new ClasspathInputStreamIterator(
                 Arrays.asList(
-                        "/tracks/2020-04-14-000.csv",
-                        "/tracks/2020-04-14-001.csv"
+                        "/tracks/viewers/happy-path/2020-04-14-000.csv",
+                        "/tracks/viewers/happy-path/2020-04-14-001.csv"
                 )
         );
         assertNotNull(it.next());
@@ -27,9 +27,9 @@ public class ClasspathInputStreamIteratorTest {
     public void nextWithInvalidPath() throws Exception {
         InputStreamIterator it = new ClasspathInputStreamIterator(
                 Arrays.asList(
-                        "/tracks/2020-04-14-000.csv",
+                        "/tracks/viewers/happy-path/2020-04-14-000.csv",
                         "/tracks/xxxxx",
-                        "/tracks/2020-04-14-001.csv",
+                        "/tracks/viewers/happy-path/2020-04-14-001.csv",
                         "/tracks/yyyy"
                 )
         );
