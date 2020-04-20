@@ -5,6 +5,7 @@ import com.github.difflib.patch.Patch;
 import com.wutsi.stats.InputStreamIterator;
 import com.wutsi.stats.impl.ClasspathInputStreamIterator;
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
