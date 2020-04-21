@@ -29,10 +29,10 @@ public class DailyViewersAggregator implements Aggregator {
         writer.write(viewers, output);
     }
 
-    private int countItemList (List<Track> tracks, int productId){
+    private int countItemList (List<Track> tracks, String productId){
         int count = 0;
         for (Track track : tracks) {
-            if(track.getProductId() == productId){
+            if(productId != null && productId.equals(track.getProductId())){
                 count += 1;
             }
         }
@@ -62,10 +62,10 @@ public class DailyViewersAggregator implements Aggregator {
 
     private List<Viewer> getViewers(List<Track> tracks) {
         List<Viewer> viewers = new ArrayList<>();
-        List<Integer> collectProductIdUse = new ArrayList<>();
+        List<String> collectProductIdUse = new ArrayList<>();
 
         for (Track track : tracks) {
-            int productId = track.getProductId();
+            String productId = track.getProductId();
 
             if (!collectProductIdUse.contains(productId)) {
                 Viewer viewer = new Viewer(date.toString(), productId);

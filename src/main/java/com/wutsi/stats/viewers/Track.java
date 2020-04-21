@@ -13,8 +13,8 @@ public class Track {
     private String page;
     @CsvBindByName
     private String event;
-    @CsvBindByName(column = "productid", required = true)
-    private int productId;
+    @CsvBindByName(column = "productid")
+    private String productId;
     @CsvBindByName
     private String value;
     @CsvBindByName
@@ -80,11 +80,11 @@ public class Track {
         this.event = event;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
