@@ -3,13 +3,10 @@ package com.wutsi.stats.viewers;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-
 public class Viewer {
     @CsvBindByPosition(position = 1)
     @CsvBindByName(column = "productid")
-    private int productId;
+    private String productId;
     @CsvBindByPosition(position = 0)
     @CsvBindByName(column = "time")
     private String date;
@@ -17,17 +14,17 @@ public class Viewer {
     @CsvBindByName(column = "count")
     private int view;
 
-    public Viewer(String date, int productId) {
+    public Viewer(String date, String productId) {
         this.date = date;
         this.productId = productId;
         this.view = 0;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
