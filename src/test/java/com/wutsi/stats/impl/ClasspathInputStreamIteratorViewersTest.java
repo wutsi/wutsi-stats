@@ -8,7 +8,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class ClasspathInputStreamIteratorTest {
+public class ClasspathInputStreamIteratorViewersTest {
 
     @Test
     public void next() throws Exception {
