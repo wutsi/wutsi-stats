@@ -8,7 +8,7 @@ public class Track {
     @CsvBindByName(column = "deviceid")
     private String deviceId;
     @CsvBindByName(column = "userid")
-    private int userId;
+    private String userId;
     @CsvBindByName
     private String page;
     @CsvBindByName
@@ -56,11 +56,11 @@ public class Track {
         this.deviceId = deviceId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
