@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.Aggregator;
 import com.wutsi.stats.InputStreamIterator;
+import com.wutsi.stats.impl.Track;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
