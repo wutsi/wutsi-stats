@@ -8,13 +8,13 @@ public class Track {
     @CsvBindByName(column = "deviceid")
     private String deviceId;
     @CsvBindByName(column = "userid")
-    private int userId;
+    private String userId;
     @CsvBindByName
     private String page;
     @CsvBindByName
     private String event;
-    @CsvBindByName(column = "productid", required = true)
-    private int productId;
+    @CsvBindByName(column = "productid")
+    private String productId;
     @CsvBindByName
     private String value;
     @CsvBindByName
@@ -56,11 +56,11 @@ public class Track {
         this.deviceId = deviceId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -80,11 +80,11 @@ public class Track {
         this.event = event;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
