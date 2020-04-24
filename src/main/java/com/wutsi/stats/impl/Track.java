@@ -1,4 +1,4 @@
-package com.wutsi.stats.viewers;
+package com.wutsi.stats.impl;
 
 import com.opencsv.bean.CsvBindByName;
 
