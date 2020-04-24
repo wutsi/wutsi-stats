@@ -2,8 +2,9 @@ package com.wutsi.stats.viewers;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import com.wutsi.stats.impl.OutputData;
 
-public class Viewer {
+public class Viewer implements OutputData {
     @CsvBindByPosition(position = 1)
     @CsvBindByName(column = "productid")
     private String productId;
@@ -12,12 +13,12 @@ public class Viewer {
     private String date;
     @CsvBindByPosition(position = 2)
     @CsvBindByName(column = "count")
-    private int view;
+    private int count;
 
     public Viewer(String date, String productId) {
         this.date = date;
         this.productId = productId;
-        this.view = 0;
+        this.count = 0;
     }
 
     public String getProductId() {
@@ -36,16 +37,11 @@ public class Viewer {
         this.date = date;
     }
 
-    public int getView() {
-        return view;
+    public int getCount() {
+        return count;
     }
 
-    public void setView(int view) {
-        this.view = view;
-    }
-
-    @Override
-    public String toString() {
-        return this.date + "," + this.getProductId() + "," + this.getView();
+    public void setCount(int count) {
+        this.count = count;
     }
 }

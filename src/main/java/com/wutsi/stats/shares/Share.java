@@ -2,8 +2,9 @@ package com.wutsi.stats.shares;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import com.wutsi.stats.impl.OutputData;
 
-public class Share {
+public class Share implements OutputData {
     @CsvBindByPosition(position = 1)
     @CsvBindByName(column = "productid")
     private String productId;
@@ -12,19 +13,19 @@ public class Share {
     private String date;
     @CsvBindByPosition(position = 2)
     @CsvBindByName(column = "count")
-    private int share;
+    private int count;
 
     public Share(String date, String productId){
         this.date = date;
         this.productId = productId;
     }
 
-    public int getShare() {
-        return share;
+    public int getCount() {
+        return count;
     }
 
-    public void setShare(int share) {
-        this.share = share;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getProductId() {
@@ -41,14 +42,5 @@ public class Share {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "Stats{" +
-                "productId='" + productId + '\'' +
-                ", date='" + date + '\'' +
-                ", count=" + share +
-                '}';
     }
 }
