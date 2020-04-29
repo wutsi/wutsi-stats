@@ -7,8 +7,11 @@ import com.wutsi.stats.impl.Track;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,15 +40,18 @@ public class DailyReadersAggregator extends AbstractDailyAggregator<Reader>{
         for (Track track : tracks) {
             String productId = track.getProductId();
             String deviceId = track.getDeviceId();
-
             if (!this.isReadFinished(tracks, deviceId, productId) && !collectProductIdUse.contains(productId)) {
                 Reader tmp = this.createOutputData(track);
                 tmp.setCount(this.countItemList(tracks, track.getProductId()));
-                tmp.setDuration(this.getDuration(tracks, deviceId, productId));
+                tmp.setDuration(this.computeDuration(tracks, deviceId, productId));
                 outputData.add(tmp);
                 collectProductIdUse.add(productId);
             }
         }
+
+        Collections.sort(outputData, (track1, track2) -> {
+            return (int) (track2.getDuration() - track1.getDuration());
+        });
         return outputData;
     }
 
@@ -55,12 +61,20 @@ public class DailyReadersAggregator extends AbstractDailyAggregator<Reader>{
         return reader;
     }
 
-    private long getDuration(List<Track> tracks, String deviceId, String productId) {
+    private int computeDuration(List<Track> tracks, String deviceId, String productId) {
         List<Track> results = tracks.stream().filter(
-                track -> productId.equals(track.getProductId()) && deviceId.equals(track.getDeviceId())
+                track -> productId.equals(track.getProductId()) &&
+                        deviceId.equals(track.getDeviceId())
         ).collect(Collectors.toList());
 
-        return Long.parseLong(results.get(results.size()-1).getTime()) - Long.parseLong(results.get(0).getTime());
+        if(results.size() < 2) {
+            return 0;
+        }
+        long milliSecondes = Long.parseLong(
+            results.get(results.size()-1).getTime()) - Long.parseLong(results.get(0).getTime()
+        );
+
+        return (int) (milliSecondes * 0.001);
     }
 
     private boolean isReadFinished (List<Track> tracks, String deviceId, String productId){
@@ -70,6 +84,6 @@ public class DailyReadersAggregator extends AbstractDailyAggregator<Reader>{
                         "100".equals(track.getValue())
         ).collect(Collectors.toList());
 
-        return  results.size() <= 0;
+        return results.size() <= 0;
     }
 }

@@ -14,7 +14,7 @@ public class Reader implements OutputData {
     @CsvBindByName(column = "count")
     private int count;
     @CsvBindByPosition(position = 3)
-    private long duration;
+    private double duration;
 
     public Reader(String date, String productId) {
         this.date = date;
@@ -41,11 +41,11 @@ public class Reader implements OutputData {
         return count;
     }
 
-    public long getDuration() {
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 
