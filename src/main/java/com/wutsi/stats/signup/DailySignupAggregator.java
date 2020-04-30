@@ -6,6 +6,7 @@ import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.Aggregator;
 import com.wutsi.stats.InputStreamIterator;
 import com.wutsi.stats.impl.Track;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +24,12 @@ import java.util.stream.Collectors;
 
 public class DailySignupAggregator implements Aggregator {
     private LocalDate date;
+    private DateFormat dateFormat;
 
-    public DailySignupAggregator(LocalDate date) { this.date = date; }
+    public DailySignupAggregator(LocalDate date) {
+        this.date = date;
+        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
         Map<String, Integer> counters = parse(iterator);
@@ -52,10 +57,9 @@ public class DailySignupAggregator implements Aggregator {
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
 
-        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         List<Track> tracks = csv.parse();
         tracks.stream()
-                .filter(it -> accept(it, fmt))
+                .filter(it -> accept(it))
                 .forEach( it -> increment(it, counters));
     }
 
@@ -68,13 +72,24 @@ public class DailySignupAggregator implements Aggregator {
         }
     }
 
-    private boolean accept(Track track, DateFormat fmt) {
-        return  "signup".equals(track.getEvent()) &&
-                !track.getBot() &&
-                fmt.format(getDate(track)).equals(date.toString());
+    private boolean accept(Track track) {
+        return  !track.getBot() &&
+                isValidEvent(track) &&
+                isValidUserId(track) &&
+                isValidDate(track);
     }
 
-    private Date getDate(Track track) {
-        return new Date(Long.parseLong(track.getTime()));
+    private boolean isValidUserId(Track track) {
+        String userId = track.getUserId();
+        return userId != null && !userId.trim().isEmpty() && NumberUtils.isDigits(userId);
+    }
+
+    private boolean isValidEvent(Track track) {
+        return "signup".equals(track.getEvent());
+    }
+
+    private boolean isValidDate(Track track) {
+        Date trackDate = new Date(Long.parseLong(track.getTime()));
+        return dateFormat.format(trackDate).equals(date.toString());
     }
 }
