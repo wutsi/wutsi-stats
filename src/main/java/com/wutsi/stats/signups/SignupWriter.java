@@ -1,4 +1,4 @@
-package com.wutsi.stats.signup;
+package com.wutsi.stats.signups;
 import com.wutsi.stats.impl.AbstractWriter;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.wutsi.stats.signup;
+package com.wutsi.stats.signups;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DailySignupAggregator implements Aggregator {
+public class DailySignupsAggregator implements Aggregator {
     private LocalDate date;
     private DateFormat dateFormat;
 
-    public DailySignupAggregator(LocalDate date) {
+    public DailySignupsAggregator(LocalDate date) {
         this.date = date;
         this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
@@ -42,10 +42,9 @@ public class DailySignupAggregator implements Aggregator {
     }
 
     private  Map<String, Integer> parse(InputStreamIterator iterator) {
-        InputStream in;
         Map<String, Integer> counters = new LinkedHashMap();
-        while ((in = iterator.next()) != null){
-            parse(in, counters);
+        while (iterator.hasNext()){
+            parse(iterator.next(), counters);
         }
         return counters;
     }

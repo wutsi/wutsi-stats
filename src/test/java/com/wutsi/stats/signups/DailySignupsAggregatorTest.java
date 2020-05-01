@@ -1,4 +1,4 @@
-package com.wutsi.stats.signup;
+package com.wutsi.stats.signups;
 
 import com.wutsi.stats.Aggregator;
 import com.wutsi.stats.AggregatorTestBase;
@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-public class DailySignupAggregatorTest extends AggregatorTestBase {
+public class DailySignupsAggregatorTest extends AggregatorTestBase {
     @Override
     protected Aggregator getAggregator() {
-        return new DailySignupAggregator(LocalDate.parse("2020-04-14"));
+        return new DailySignupsAggregator(LocalDate.parse("2020-04-14"));
     }
 
     @Test

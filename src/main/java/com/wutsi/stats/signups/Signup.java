@@ -1,4 +1,4 @@
-package com.wutsi.stats.signup;
+package com.wutsi.stats.signups;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
