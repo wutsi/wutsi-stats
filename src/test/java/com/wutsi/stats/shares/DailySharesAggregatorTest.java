@@ -24,9 +24,9 @@ public class DailySharesAggregatorTest {
     @Test
     public void happyPath() throws Exception {
         test(
-                "/tracks.shares/happy-path/2020-04-14-output.csv",
-                "/tracks.shares/happy-path/2020-04-14-000.csv",
-                "/tracks.shares/happy-path/2020-04-14-001.csv"
+                "/tracks/shares/happy-path/2020-04-14-output.csv",
+                "/tracks/shares/happy-path/2020-04-14-000.csv",
+                "/tracks/shares/happy-path/2020-04-14-001.csv"
         );
     }
 
@@ -36,8 +36,8 @@ public class DailySharesAggregatorTest {
     @Test
     public void bot() throws Exception {
         test(
-                "/tracks.shares/bot/2020-04-14-output.csv",
-                "/tracks.shares/bot/2020-04-14-000.csv",
+                "/tracks/shares/bot/2020-04-14-output.csv",
+                "/tracks/shares/bot/2020-04-14-000.csv",
                 "/tracks/shares.bot/2020-04-14-001.csv"
         );
     }
@@ -48,10 +48,10 @@ public class DailySharesAggregatorTest {
     @Test
     public void date() throws Exception {
         test(
-                "/tracks.shares/date/2020-04-14-output.csv",
-                "/tracks.shares/date/2020-04-14-000.csv",
-                "/tracks.shares/date/2020-04-14-001.csv",
-                "/tracks.shares/date/2020-04-15-000.csv"
+                "/tracks/shares/date/2020-04-14-output.csv",
+                "/tracks/shares/date/2020-04-14-000.csv",
+                "/tracks/shares/date/2020-04-14-001.csv",
+                "/tracks/shares/date/2020-04-15-000.csv"
         );
     }
 
@@ -61,9 +61,9 @@ public class DailySharesAggregatorTest {
     @Test
     public void page() throws Exception {
         test(
-                "/tracks.shares/page/2020-04-14-output.csv",
-                "/tracks.shares/page/2020-04-14-000.csv",
-                "/tracks.shares/page/2020-04-14-001.csv"
+                "/tracks/shares/page/2020-04-14-output.csv",
+                "/tracks/shares/page/2020-04-14-000.csv",
+                "/tracks/shares/page/2020-04-14-001.csv"
         );
     }
 
