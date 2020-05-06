@@ -3,17 +3,19 @@ package com.wutsi.stats.readers;
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.InputStreamIterator;
 import com.wutsi.stats.impl.AbstractDailyAggregator;
+import com.wutsi.stats.impl.Session;
 import com.wutsi.stats.impl.Track;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class DailyReadersAggregator extends AbstractDailyAggregator<Reader>{
     private LocalDate date;
@@ -21,69 +23,68 @@ public class DailyReadersAggregator extends AbstractDailyAggregator<Reader>{
     public DailyReadersAggregator(LocalDate date) { this.date = date; }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Reader> readers = this.getOutputData(this.getTracks(iterator));
+        List<Session> sessions = this.getSessions(this.getTracks(iterator));
+        List<Reader> readers = toReaders(sessions);
+
         ReaderWriter writer = new ReaderWriter();
         writer.write(readers, output);
     }
 
     protected boolean isValidTrack(Track track) {
-        return  "scroll".equals(track.getEvent()) &&
-                "page.read".equals(track.getPage()) &&
+        return  "page.read".equals(track.getPage()) &&
                 !track.getBot() &&
                 this.isDate(track.getTime(), this.date);
     }
 
-    protected List<Reader> getOutputData(List<Track> tracks) {
-        List<Reader> outputData = new ArrayList<>();
-        List<String> collectProductIdUse = new ArrayList<>();
-
-        for (Track track : tracks) {
-            String productId = track.getProductId();
-            String deviceId = track.getDeviceId();
-            if (!this.isReadFinished(tracks, deviceId, productId) && !collectProductIdUse.contains(productId)) {
-                Reader tmp = this.createOutputData(track);
-                tmp.setCount(this.countItemList(tracks, track.getProductId()));
-                tmp.setDuration(this.computeDuration(tracks, deviceId, productId));
-                outputData.add(tmp);
-                collectProductIdUse.add(productId);
-            }
-        }
-
-        Collections.sort(outputData, (track1, track2) -> {
-            return (int) (track2.getDuration() - track1.getDuration());
-        });
-        return outputData;
-    }
-
     @Override
     protected Reader createOutputData(Track track) {
-        Reader reader = new Reader(this.date.toString(), track.getProductId());
-        return reader;
+        return null;
     }
 
-    private int computeDuration(List<Track> tracks, String deviceId, String productId) {
-        List<Track> results = tracks.stream().filter(
-                track -> productId.equals(track.getProductId()) &&
-                        deviceId.equals(track.getDeviceId())
-        ).collect(Collectors.toList());
+    private List<Session> getSessions(List<Track> tracks) {
+        Map<String, Session> hits = new LinkedHashMap<>();
 
-        if(results.size() < 2) {
-            return 0;
+        for(Track track: tracks){
+            Session session = hits.get(track.getHitId());
+            if(session == null){
+                session = new Session(track.getHitId(), track.getProductId());
+                hits.put(track.getHitId(), session);
+            }
+            session.add(track);
         }
-        long milliSecondes = Long.parseLong(
-            results.get(results.size()-1).getTime()) - Long.parseLong(results.get(0).getTime()
-        );
 
-        return (int) (milliSecondes * 0.001);
+        return new ArrayList<>(hits.values());
     }
 
-    private boolean isReadFinished (List<Track> tracks, String deviceId, String productId){
-        List<Track> results = tracks.stream().filter(
-                track -> productId.equals(track.getProductId()) &&
-                        deviceId.equals(track.getDeviceId()) &&
-                        "100".equals(track.getValue())
-        ).collect(Collectors.toList());
+    private List<Reader> toReaders(List<Session> sessions) {
+        return sessions.stream()
+                .filter(session -> this.isValidSession(session))
+                .collect(groupingBy(Session::getProductId))
+                .values()
+                .stream()
+                .map(it -> toReader(it))
+                .collect(Collectors.toList());
+    }
 
-        return results.size() <= 0;
+    private Reader toReader(List<Session> sessions) {
+        long duration = sessions.stream()
+                .mapToLong(Session::getDurationInSecond)
+                .sum();
+
+        return new Reader(this.date.toString(), sessions.get(0).getProductId(), sessions.size(), duration);
+    }
+
+    private boolean isValidSession(Session session) {
+        for(Track track: session.getTracks()){
+            if("scroll".equals(track.getEvent()) && "100".equals(track.getValue())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected List<Reader> getOutputData(List<Track> tracks) {
+        List<Reader> outputData = new ArrayList<>();
+        return outputData;
     }
 }
