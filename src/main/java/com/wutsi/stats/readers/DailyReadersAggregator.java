@@ -44,6 +44,6 @@ public class DailyReadersAggregator extends AbstractDailySessionAggregator {
                 .sum();
 
         Session session = sessions.get(0);
-        return new Reader(this.date.toString(), session.getProductId(), sessions.size(), duration);
+        return new Reader(this.date.toString(), session.getProductId(), sessions.size());
     }
 }

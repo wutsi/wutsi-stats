@@ -12,14 +12,11 @@ public class Reader {
     @CsvBindByPosition(position = 2)
     @CsvBindByName(column = "count")
     private int count;
-    @CsvBindByPosition(position = 3)
-    private long duration;
 
-    public Reader(String date, String productId, int count, long duration) {
+    public Reader(String date, String productId, int count) {
         this.date = date;
         this.productId = productId;
         this.count = count;
-        this.duration = duration;
     }
 
     public String getDate() {
@@ -40,13 +37,5 @@ public class Reader {
 
     public int getCount() {
         return count;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
     }
 }

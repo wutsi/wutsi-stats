@@ -8,6 +8,6 @@ public class ReaderWriter extends AbstractWriter<Reader> {
 
     @Override
     protected void writeHeader(Writer writer) throws IOException {
-        writer.append("\"time\",\"productid\",\"count\",\"duration\"\n");
+        writer.append("\"time\",\"productid\",\"count\"\n");
     }
 }
