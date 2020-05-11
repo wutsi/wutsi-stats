@@ -1,4 +1,4 @@
-package com.wutsi.stats.viewers;
+package com.wutsi.stats.duration;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.Patch;
@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
-public class DailyViewersAggregatorTest {
-    DailyViewersAggregator aggregator;
+public class DailyReadTimeAggregatorTest {
+    DailyReadTimeAggregator aggregator;
 
     @Test
     public void happyPath() throws Exception {
         test(
-                "/tracks/viewers/happy-path/2020-04-14-output.csv",
-                "/tracks/viewers/happy-path/2020-04-14-000.csv",
-                "/tracks/viewers/happy-path/2020-04-14-001.csv"
+                "/tracks/duration/happy-path/2020-04-14-output.csv",
+                "/tracks/duration/happy-path/2020-04-14-000.csv",
+                "/tracks/duration/happy-path/2020-04-14-001.csv"
         );
     }
 
@@ -36,9 +36,9 @@ public class DailyViewersAggregatorTest {
     @Test
     public void bot() throws Exception {
         test(
-                "/tracks/viewers/bot/2020-04-14-output.csv",
-                "/tracks/viewers/bot/2020-04-14-000.csv",
-                "/tracks/viewers/bot/2020-04-14-001.csv"
+                "/tracks/duration/bot/2020-04-14-output.csv",
+                "/tracks/duration/bot/2020-04-14-000.csv",
+                "/tracks/duration/bot/2020-04-14-001.csv"
         );
     }
 
@@ -48,10 +48,10 @@ public class DailyViewersAggregatorTest {
     @Test
     public void date() throws Exception {
         test(
-                "/tracks/viewers/date/2020-04-14-output.csv",
-                "/tracks/viewers/date/2020-04-14-000.csv",
-                "/tracks/viewers/date/2020-04-14-001.csv",
-                "/tracks/viewers/date/2020-04-15-000.csv"
+                "/tracks/duration/date/2020-04-14-output.csv",
+                "/tracks/duration/date/2020-04-14-000.csv",
+                "/tracks/duration/date/2020-04-14-001.csv",
+                "/tracks/duration/date/2020-04-15-000.csv"
         );
     }
 
@@ -61,9 +61,9 @@ public class DailyViewersAggregatorTest {
     @Test
     public void page() throws Exception {
         test(
-                "/tracks/viewers/page/2020-04-14-output.csv",
-                "/tracks/viewers/page/2020-04-14-000.csv",
-                "/tracks/viewers/page/2020-04-14-001.csv"
+                "/tracks/duration/page/2020-04-14-output.csv",
+                "/tracks/duration/page/2020-04-14-000.csv",
+                "/tracks/duration/page/2020-04-14-001.csv"
         );
     }
 
@@ -72,7 +72,7 @@ public class DailyViewersAggregatorTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         // WHEN
-        aggregator = new DailyViewersAggregator(LocalDate.parse("2020-04-14"));
+        aggregator = new DailyReadTimeAggregator(LocalDate.parse("2020-04-14"));
         aggregator.aggregate(iterator, out);
 
         // THEN

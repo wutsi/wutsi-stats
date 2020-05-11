@@ -1,10 +1,8 @@
 package com.wutsi.stats.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 public class Session {
     private String hitId;
@@ -14,15 +12,6 @@ public class Session {
     public Session(String hitId, String productId) {
         this.hitId = hitId;
         this.productId = productId;
-    }
-
-    public boolean hasTrackWithEvent(String event) {
-        for(Track track: tracks){
-            if(event.equals(track.getEvent())){
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean hasTrackWithEvent(String event, String value) {
@@ -35,20 +24,20 @@ public class Session {
     }
 
     public long getDurationInSecond(){
-        Collections.sort(
-                this.tracks,
-                (t1, t2) -> (int) (t1.getTimeToLong() - t2.getTimeToLong())
-        );
-
-        List<Track> tracksTmp = this.tracks.stream()
-                .filter(track -> "scroll".equals(track.getEvent()))
+        List<Track> tmp = tracks.stream()
+                .filter(it -> includeInDuration(it))
+                .sorted((t1, t2) -> (int) (t1.getTimeToLong() - t2.getTimeToLong()))
                 .collect(Collectors.toList());
-
-        if(tracksTmp.size() < 2){
-            return 0;
+        if (tmp.size() <= 1) {
+            return 0L;
+        } else {
+            return (tmp.get(tmp.size() - 1).getTimeToLong() - tmp.get(0).getTimeToLong()) / 1000;
         }
+    }
 
-        return (tracksTmp.get(tracksTmp.size() - 1).getTimeToLong() - tracksTmp.get(0).getTimeToLong()) / 1000;
+    private boolean includeInDuration(Track track) {
+        String event = track.getEvent();
+        return "readstart".equals(event) || "scroll".equals(event);
     }
 
     public void add(Track track) {

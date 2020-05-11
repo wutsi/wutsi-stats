@@ -1,4 +1,4 @@
-package com.wutsi.stats.readers;
+package com.wutsi.stats.duration;
 
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.InputStreamIterator;
@@ -13,37 +13,37 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class DailyReadersAggregator extends AbstractDailySessionAggregator {
-    public DailyReadersAggregator(LocalDate date) {
+public class DailyReadTimeAggregator extends AbstractDailySessionAggregator {
+    public DailyReadTimeAggregator(LocalDate date) {
         super(date);
     }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
         List<Session> sessions = this.getSessions(iterator);
-        List<Reader> readers = toReaders(sessions);
-        new ReaderWriter().write(readers, output);
+        List<ReadTime> readTimes = toReadTimes(sessions);
+        new ReadTimeWriter().write(readTimes, output);
     }
 
     @Override
     protected boolean isValidSession(Session session) {
-        return session.hasTrackWithEvent("scroll", "100");
+        return true;
     }
 
-    private List<Reader> toReaders(List<Session> sessions) {
+    private List<ReadTime> toReadTimes(List<Session> sessions) {
         return sessions.stream()
                 .collect(groupingBy(Session::getProductId))
                 .values()
                 .stream()
-                .map(it -> toReader(it))
+                .map(it -> toReadTime(it))
+                .filter(it -> it != null)
                 .collect(Collectors.toList());
     }
 
-    private Reader toReader(List<Session> sessions) {
+    private ReadTime toReadTime(List<Session> sessions) {
         long duration = sessions.stream()
                 .mapToLong(Session::getDurationInSecond)
                 .sum();
 
-        Session session = sessions.get(0);
-        return new Reader(this.date.toString(), session.getProductId(), sessions.size(), duration);
+        return duration == 0 ? null : new ReadTime(this.date.toString(), sessions.get(0).getProductId(), duration);
     }
 }

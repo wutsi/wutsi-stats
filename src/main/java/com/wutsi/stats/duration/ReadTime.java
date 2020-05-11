@@ -1,8 +1,8 @@
-package com.wutsi.stats.readers;
+package com.wutsi.stats.duration;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
-public class Reader {
+public class ReadTime {
     @CsvBindByPosition(position = 0)
     @CsvBindByName(column = "time")
     private String date;
@@ -10,16 +10,13 @@ public class Reader {
     @CsvBindByName(column = "productid")
     private String productId;
     @CsvBindByPosition(position = 2)
-    @CsvBindByName(column = "count")
-    private int count;
-    @CsvBindByPosition(position = 3)
-    private long duration;
+    @CsvBindByName(column = "readtime")
+    private long readTime;
 
-    public Reader(String date, String productId, int count, long duration) {
+    public ReadTime(String date, String productId, long readTime) {
         this.date = date;
         this.productId = productId;
-        this.count = count;
-        this.duration = duration;
+        this.readTime = readTime;
     }
 
     public String getDate() {
@@ -38,15 +35,11 @@ public class Reader {
         this.productId = productId;
     }
 
-    public int getCount() {
-        return count;
+    public long getReadTime() {
+        return readTime;
     }
 
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
+    public void setReadTime(final long readTime) {
+        this.readTime = readTime;
     }
 }

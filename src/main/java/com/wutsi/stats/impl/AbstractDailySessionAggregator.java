@@ -17,8 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class AbstractSessionAggregator<T extends OutputData> implements Aggregator {
-    protected abstract boolean isValidTrack(Track track);
+public abstract class AbstractDailySessionAggregator implements Aggregator {
+    protected LocalDate date;
+
+    public AbstractDailySessionAggregator(LocalDate date){
+        this.date = date;
+    }
+
 
     protected abstract boolean isValidSession(Session session);
 
@@ -52,6 +57,12 @@ public abstract class AbstractSessionAggregator<T extends OutputData> implements
         } finally{
             reader.close();
         }
+    }
+
+    protected boolean isValidTrack(Track track) {
+        return  "page.read".equals(track.getPage()) &&
+                !track.getBot() &&
+                isDate(track.getTime(), this.date);
     }
 
     private void addTrack(Track track, Map<String, Session> sessions) {

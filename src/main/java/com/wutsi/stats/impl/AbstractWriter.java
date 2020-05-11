@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
-public abstract class AbstractWriter <T extends OutputData>  {
+public abstract class AbstractWriter <T>  {
     protected abstract void writeHeader (Writer writer) throws IOException;
 
     public void write(List<T> data, OutputStream out) throws IOException, CsvException {
