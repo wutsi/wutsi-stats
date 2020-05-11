@@ -16,9 +16,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDailyAggregator <T extends OutputData> implements Aggregator {
+public abstract class AbstractDailyAggregator<T extends OutputData> implements Aggregator {
     protected abstract boolean isValidTrack(Track track);
+
+    @Deprecated
     protected abstract T createOutputData (Track track);
+
+    @Deprecated
     protected abstract List<T> getOutputData(List<Track> tracks);
 
     protected int countItemList (List<Track> tracks, String productId){

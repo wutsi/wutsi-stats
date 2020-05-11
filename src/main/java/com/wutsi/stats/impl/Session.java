@@ -16,6 +16,24 @@ public class Session {
         this.productId = productId;
     }
 
+    public boolean hasTrackWithEvent(String event) {
+        for(Track track: tracks){
+            if(event.equals(track.getEvent())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTrackWithEvent(String event, String value) {
+        for(Track track: tracks){
+            if(event.equals(track.getEvent()) && value.equals(track.getValue())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public long getDurationInSecond(){
         Collections.sort(
                 this.tracks,
