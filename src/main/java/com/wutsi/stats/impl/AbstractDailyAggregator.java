@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractDailyAggregator <T extends OutputData> implements Aggregator {
     protected abstract boolean isValidTrack(Track track);
     protected abstract T createOutputData (Track track);
+    protected abstract List<T> getOutputData(List<Track> tracks);
 
     protected int countItemList (List<Track> tracks, String productId){
         int count = 0;
@@ -38,23 +39,6 @@ public abstract class AbstractDailyAggregator <T extends OutputData> implements 
     protected boolean isDate(String trackDate, LocalDate currectDate) {
         String trackCurrentDate = this.convertTimeStampToDateString(Long.parseLong(trackDate));
         return currectDate.toString().equals(trackCurrentDate);
-    }
-
-    protected List<T> getOutputData(List<Track> tracks) {
-        List<T> outputData = new ArrayList<>();
-        List<String> collectProductIdUse = new ArrayList<>();
-
-        for (Track track : tracks) {
-            String productId = track.getProductId();
-
-            if (!collectProductIdUse.contains(productId)) {
-                T tmp = this.createOutputData(track);
-                tmp.setCount(this.countItemList(tracks, track.getProductId()));
-                outputData.add(tmp);
-                collectProductIdUse.add(productId);
-            }
-        }
-        return outputData;
     }
 
     protected List<Track> getTracks(InputStreamIterator iterator) throws IOException {

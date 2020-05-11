@@ -39,6 +39,12 @@ public class Track {
     private boolean bot;
     @CsvBindByName
     private String ua;
+    @CsvBindByName(column = "hitid")
+    private String hitId;
+
+    public long getTimeToLong(){
+        return Long.parseLong(this.getTime());
+    }
 
     public String getTime() {
         return time;
@@ -184,6 +190,18 @@ public class Track {
         this.ua = ua;
     }
 
+    public boolean isBot() {
+        return bot;
+    }
+
+    public String getHitId() {
+        return hitId;
+    }
+
+    public void setHitId(String hitId) {
+        this.hitId = hitId;
+    }
+
     @Override
     public String toString() {
         return "Track{" +
@@ -205,6 +223,7 @@ public class Track {
                 ", referer='" + referer + '\'' +
                 ", bot='" + bot + '\'' +
                 ", ua='" + ua + '\'' +
+                ", hitid='" + hitId + '\'' +
                 '}';
     }
 }

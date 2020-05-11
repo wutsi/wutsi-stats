@@ -8,6 +8,7 @@ import com.wutsi.stats.impl.Track;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,6 +28,23 @@ public class DailyViewersAggregator extends AbstractDailyAggregator<Viewer> {
                 "page.read".equals(track.getPage()) &&
                 !track.getBot() &&
                 this.isDate(track.getTime(), this.date);
+    }
+
+    protected List<Viewer> getOutputData(List<Track> tracks) {
+        List<Viewer> outputData = new ArrayList<>();
+        List<String> collectProductIdUse = new ArrayList<>();
+
+        for (Track track : tracks) {
+            String productId = track.getProductId();
+
+            if (!collectProductIdUse.contains(productId)) {
+                Viewer tmp = this.createOutputData(track);
+                tmp.setCount(this.countItemList(tracks, track.getProductId()));
+                outputData.add(tmp);
+                collectProductIdUse.add(productId);
+            }
+        }
+        return outputData;
     }
 
     @Override
