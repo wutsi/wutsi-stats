@@ -1,4 +1,4 @@
-package com.wutsi.stats.duration;
+package com.wutsi.stats.readtime;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 

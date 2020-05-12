@@ -1,6 +1,5 @@
-package com.wutsi.stats.duration;
+package com.wutsi.stats.readtime;
 import com.wutsi.stats.impl.AbstractWriter;
-import com.wutsi.stats.readers.Reader;
 
 import java.io.IOException;
 import java.io.Writer;

@@ -1,4 +1,4 @@
-package com.wutsi.stats.duration;
+package com.wutsi.stats.readtime;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.Patch;
@@ -24,9 +24,9 @@ public class DailyReadTimeAggregatorTest {
     @Test
     public void happyPath() throws Exception {
         test(
-                "/tracks/duration/happy-path/2020-04-14-output.csv",
-                "/tracks/duration/happy-path/2020-04-14-000.csv",
-                "/tracks/duration/happy-path/2020-04-14-001.csv"
+                "/tracks/readtime/happy-path/2020-04-14-output.csv",
+                "/tracks/readtime/happy-path/2020-04-14-000.csv",
+                "/tracks/readtime/happy-path/2020-04-14-001.csv"
         );
     }
 
@@ -36,9 +36,9 @@ public class DailyReadTimeAggregatorTest {
     @Test
     public void bot() throws Exception {
         test(
-                "/tracks/duration/bot/2020-04-14-output.csv",
-                "/tracks/duration/bot/2020-04-14-000.csv",
-                "/tracks/duration/bot/2020-04-14-001.csv"
+                "/tracks/readtime/bot/2020-04-14-output.csv",
+                "/tracks/readtime/bot/2020-04-14-000.csv",
+                "/tracks/readtime/bot/2020-04-14-001.csv"
         );
     }
 
@@ -48,10 +48,10 @@ public class DailyReadTimeAggregatorTest {
     @Test
     public void date() throws Exception {
         test(
-                "/tracks/duration/date/2020-04-14-output.csv",
-                "/tracks/duration/date/2020-04-14-000.csv",
-                "/tracks/duration/date/2020-04-14-001.csv",
-                "/tracks/duration/date/2020-04-15-000.csv"
+                "/tracks/readtime/date/2020-04-14-output.csv",
+                "/tracks/readtime/date/2020-04-14-000.csv",
+                "/tracks/readtime/date/2020-04-14-001.csv",
+                "/tracks/readtime/date/2020-04-15-000.csv"
         );
     }
 
@@ -61,9 +61,9 @@ public class DailyReadTimeAggregatorTest {
     @Test
     public void page() throws Exception {
         test(
-                "/tracks/duration/page/2020-04-14-output.csv",
-                "/tracks/duration/page/2020-04-14-000.csv",
-                "/tracks/duration/page/2020-04-14-001.csv"
+                "/tracks/readtime/page/2020-04-14-output.csv",
+                "/tracks/readtime/page/2020-04-14-000.csv",
+                "/tracks/readtime/page/2020-04-14-001.csv"
         );
     }
 
