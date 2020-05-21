@@ -40,7 +40,7 @@ public class Session {
 
     private boolean includeInDuration(Track track) {
         String event = track.getEvent();
-        return "readstart".equals(event) || "scroll".equals(event);
+        return "readstart".equals(event) || "scroll".equals(event)  || "g_one_tap_show".equals(event);
     }
 
     public void add(Track track) {

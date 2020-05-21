@@ -2,54 +2,50 @@ package com.wutsi.stats.viewers;
 
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.InputStreamIterator;
-import com.wutsi.stats.impl.AbstractDailyAggregator;
-import com.wutsi.stats.impl.Track;
+import com.wutsi.stats.impl.AbstractDailySessionAggregator;
+import com.wutsi.stats.impl.Session;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 
-public class DailyViewersAggregator extends AbstractDailyAggregator<Viewer> {
-    private LocalDate date;
-
-    public DailyViewersAggregator (LocalDate date) { this.date = date; }
+public class DailyViewersAggregator extends AbstractDailySessionAggregator {
+    public DailyViewersAggregator (LocalDate date) {
+        super(date);
+    }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Viewer> viewers = this.getOutputData(this.getTracks(iterator));
-        ViewerWriter writer = new ViewerWriter();
-        writer.write(viewers, output);
-    }
-
-    protected boolean isValidTrack(Track track) {
-        return  "readstart".equals(track.getEvent()) &&
-                "page.read".equals(track.getPage()) &&
-                !track.getBot() &&
-                this.isDate(track.getTime(), this.date);
-    }
-
-    protected List<Viewer> getOutputData(List<Track> tracks) {
-        List<Viewer> outputData = new ArrayList<>();
-        List<String> collectProductIdUse = new ArrayList<>();
-
-        for (Track track : tracks) {
-            String productId = track.getProductId();
-
-            if (!collectProductIdUse.contains(productId)) {
-                Viewer tmp = this.createOutputData(track);
-                tmp.setCount(this.countItemList(tracks, track.getProductId()));
-                outputData.add(tmp);
-                collectProductIdUse.add(productId);
-            }
-        }
-        return outputData;
+        List<Session> sessions = this.getSessions(iterator);
+        List<Viewer> viewers = toViewers(sessions);
+        new ViewerWriter().write(viewers, output);
     }
 
     @Override
-    protected Viewer createOutputData(Track track) {
-        Viewer viewer = new Viewer(date.toString(), track.getProductId());
-        return viewer;
+    protected boolean isValidSession(Session session) {
+        return true;
     }
+
+    private List<Viewer> toViewers(List<Session> sessions) {
+        return sessions.stream()
+                .collect(groupingBy(Session::getProductId))
+                .values()
+                .stream()
+                .map(it -> toViewer(it))
+                .filter(it -> it != null)
+                .collect(Collectors.toList());
+    }
+
+    private Viewer toViewer(List<Session> sessions) {
+        Collection<List<Session>> viewers = sessions.stream()
+                .collect(groupingBy(Session::getHitId))
+                .values();
+
+        return viewers.isEmpty() ? null : new Viewer(this.date.toString(), sessions.get(0).getProductId(), viewers.size());
+    }
+
 }

@@ -35,12 +35,12 @@ public class DailyXReadAggregator extends AbstractDailySessionAggregator {
                 .collect(groupingBy(Session::getProductId))
                 .values()
                 .stream()
-                .map(it -> toReadTime(it))
+                .map(it -> toXRead(it))
                 .filter(it -> it != null)
                 .collect(Collectors.toList());
     }
 
-    private XRead toReadTime(List<Session> sessions) {
+    private XRead toXRead(List<Session> sessions) {
         List<Track> xreads = sessions.stream()
                 .flatMap(it -> it.getTracks().stream())
                 .filter(it -> "xread".equals(it.getEvent()))
