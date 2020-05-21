@@ -14,13 +14,16 @@ public class Session {
         this.productId = productId;
     }
 
+    public boolean hasTrackWithEvent(String event) {
+        return tracks.stream()
+                .filter(it -> event.equals(it.getEvent()))
+                .findFirst().isPresent();
+    }
+
     public boolean hasTrackWithEvent(String event, String value) {
-        for(Track track: tracks){
-            if(event.equals(track.getEvent()) && value.equals(track.getValue())){
-                return true;
-            }
-        }
-        return false;
+        return tracks.stream()
+                .filter(it -> event.equals(it.getEvent()) && value.equals(it.getValue()))
+                .findFirst().isPresent();
     }
 
     public long getDurationInSecond(){
