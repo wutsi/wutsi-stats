@@ -1,4 +1,4 @@
-package com.wutsi.stats.shares;
+package com.wutsi.stats.device;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.Patch;
@@ -18,52 +18,34 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
-public class DailySharesAggregatorTest {
-    DailySharesAggregator aggregator;
+public class DailyDeviceAggregatorTest {
+    DailyDeviceAggregator aggregator;
 
     @Test
     public void happyPath() throws Exception {
         test(
-                "/tracks/shares/happy-path/2020-04-14-output.csv",
-                "/tracks/shares/happy-path/2020-04-14-000.csv",
-                "/tracks/shares/happy-path/2020-04-14-001.csv"
+                "/tracks/device/happy-path/2020-04-14-output.csv",
+                "/tracks/device/happy-path/2020-04-14-000.csv",
+                "/tracks/device/happy-path/2020-04-14-001.csv"
         );
     }
 
-    /**
-     * Make sure that we do not process bot events
-     */
     @Test
     public void bot() throws Exception {
         test(
-                "/tracks/shares/bot/2020-04-14-output.csv",
-                "/tracks/shares/bot/2020-04-14-000.csv",
-                "/tracks/shares.bot/2020-04-14-001.csv"
+                "/tracks/device/bot/2020-04-14-output.csv",
+                "/tracks/device/bot/2020-04-14-000.csv",
+                "/tracks/device/bot/2020-04-14-001.csv"
         );
     }
 
-    /**
-     * Make sure that we only process events associated with the provided date
-     */
     @Test
     public void date() throws Exception {
         test(
-                "/tracks/shares/date/2020-04-14-output.csv",
-                "/tracks/shares/date/2020-04-14-000.csv",
-                "/tracks/shares/date/2020-04-14-001.csv",
-                "/tracks/shares/date/2020-04-15-000.csv"
-        );
-    }
-
-    /**
-     * Make sure that we only process events associated with page=page.read
-     */
-    @Test
-    public void page() throws Exception {
-        test(
-                "/tracks/shares/page/2020-04-14-output.csv",
-                "/tracks/shares/page/2020-04-14-000.csv",
-                "/tracks/shares/page/2020-04-14-001.csv"
+                "/tracks/device/date/2020-04-14-output.csv",
+                "/tracks/device/date/2020-04-14-000.csv",
+                "/tracks/device/date/2020-04-14-001.csv",
+                "/tracks/device/date/2020-04-15-000.csv"
         );
     }
 
@@ -72,13 +54,14 @@ public class DailySharesAggregatorTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         // WHEN
-        aggregator = new DailySharesAggregator(LocalDate.parse("2020-04-14"));
+        aggregator = new DailyDeviceAggregator(LocalDate.parse("2020-04-14"));
         aggregator.aggregate(iterator, out);
 
         // THEN
         InputStream expected = getClass().getResourceAsStream(expectedPath);
         assertCsvMatches(expected, new ByteArrayInputStream(out.toByteArray()));
     }
+
 
     private void assertCsvMatches(InputStream expected, InputStream value) throws Exception {
         Patch<String> patch = DiffUtils.diff(
@@ -100,4 +83,5 @@ public class DailySharesAggregatorTest {
     private InputStreamIterator createIterator(String...paths) {
         return new ClasspathInputStreamIterator(Arrays.asList(paths));
     }
+
 }

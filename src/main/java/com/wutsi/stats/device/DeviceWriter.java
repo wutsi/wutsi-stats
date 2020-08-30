@@ -1,12 +1,12 @@
-package com.wutsi.stats.shares;
+package com.wutsi.stats.device;
 import com.wutsi.stats.impl.AbstractWriter;
+
 import java.io.IOException;
 import java.io.Writer;
 
-public class ShareWriter extends AbstractWriter<Share> {
-
+public class DeviceWriter extends AbstractWriter<Device> {
     @Override
     protected void writeHeader(Writer writer) throws IOException {
-        writer.append("\"time\",\"productid\",\"count\"\n");
+        writer.append("\"deviceid\",\"userid\"\n");
     }
 }

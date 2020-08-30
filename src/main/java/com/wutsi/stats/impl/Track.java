@@ -39,8 +39,21 @@ public class Track {
     private boolean bot;
     @CsvBindByName
     private String ua;
+
     @CsvBindByName(column = "hitid")
     private String hitId;
+
+    @CsvBindByName(column = "source")
+    private String source;
+
+    @CsvBindByName(column = "medium")
+    private String medium;
+
+    @CsvBindByName(column = "campaign")
+    private String campaign;
+
+    @CsvBindByName(column = "url")
+    private String url;
 
     public long getTimeToLong(){
         return Long.parseLong(this.getTime());
@@ -202,28 +215,35 @@ public class Track {
         this.hitId = hitId;
     }
 
-    @Override
-    public String toString() {
-        return "Track{" +
-                "time='" + time + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", userId=" + userId +
-                ", page='" + page + '\'' +
-                ", event='" + event + '\'' +
-                ", productId=" + productId +
-                ", value='" + value + '\'' +
-                ", os='" + os + '\'' +
-                ", osVersion='" + osVersion + '\'' +
-                ", deviceType='" + deviceType + '\'' +
-                ", browser='" + browser + '\'' +
-                ", ip='" + ip + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", traffic='" + traffic + '\'' +
-                ", referer='" + referer + '\'' +
-                ", bot='" + bot + '\'' +
-                ", ua='" + ua + '\'' +
-                ", hitid='" + hitId + '\'' +
-                '}';
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(final String source) {
+        this.source = source;
+    }
+
+    public String getMedium() {
+        return medium;
+    }
+
+    public void setMedium(final String medium) {
+        this.medium = medium;
+    }
+
+    public String getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(final String campaign) {
+        this.campaign = campaign;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
     }
 }

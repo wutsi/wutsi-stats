@@ -2,28 +2,21 @@ package com.wutsi.stats.impl;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.wutsi.stats.Aggregator;
 import com.wutsi.stats.InputStreamIterator;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDailySessionAggregator implements Aggregator {
-    protected LocalDate date;
-
+public abstract class AbstractDailySessionAggregator extends AbstractDailyAggregator {
     public AbstractDailySessionAggregator(LocalDate date){
-        this.date = date;
+        super(date);
     }
-
 
     protected abstract boolean isValidSession(Session session);
 
@@ -62,7 +55,7 @@ public abstract class AbstractDailySessionAggregator implements Aggregator {
     protected boolean isValidTrack(Track track) {
         return  "page.read".equals(track.getPage()) &&
                 !track.getBot() &&
-                isDate(track.getTime(), this.date);
+                isValidDate(track.getTime(), this.date);
     }
 
     private void addTrack(Track track, Map<String, Session> sessions) {
@@ -72,15 +65,5 @@ public abstract class AbstractDailySessionAggregator implements Aggregator {
             sessions.put(track.getHitId(), session);
         }
         session.add(track);
-    }
-
-    private String convertTimeStampToDateString (long timestamp) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.format(new Date(timestamp).getTime());
-    }
-
-    protected boolean isDate(String trackDate, LocalDate currectDate) {
-        String trackCurrentDate = this.convertTimeStampToDateString(Long.parseLong(trackDate));
-        return currectDate.toString().equals(trackCurrentDate);
     }
 }
