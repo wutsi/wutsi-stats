@@ -6,7 +6,7 @@
 
     <groupId>com.wutsi</groupId>
     <artifactId>wutsi-stats</artifactId>
-    <version>1.13.0</version>
+    <version>1.14.0</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -23,10 +23,15 @@
         <junit.version>4.12</junit.version>
         <mockito.version>1.9.5</mockito.version>
 
-        <wutsi-core.version>1.2.0</wutsi-core.version>
+        <wutsi-core.version>1.16.0</wutsi-core.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.wutsi</groupId>
+            <artifactId>wutsi-core</artifactId>
+            <version>${wutsi-core.version}</version>
+        </dependency>
 
         <!-- MISC -->
         <dependency>

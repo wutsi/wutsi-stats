@@ -41,7 +41,7 @@ public class DailySignupsAggregator implements Aggregator {
         new SignupWriter().write(data, output);
     }
 
-    private  Map<String, Integer> parse(InputStreamIterator iterator) {
+    private  Map<String, Integer> parse(InputStreamIterator iterator) throws IOException {
         Map<String, Integer> counters = new LinkedHashMap();
         while (iterator.hasNext()){
             parse(iterator.next(), counters);
