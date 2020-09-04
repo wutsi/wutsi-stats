@@ -1,58 +1,38 @@
 package com.wutsi.stats.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.wutsi.stats.Track;
 
 public class Session {
     private String hitId;
     private String productId;
-    private List<Track> tracks = new ArrayList<>();
+    private long startTimeMillis = 0;
+    private long endTimeMillis = 0;
 
     public Session(String hitId, String productId) {
         this.hitId = hitId;
         this.productId = productId;
     }
 
-    public boolean hasTrackWithEvent(String event) {
-        return tracks.stream()
-                .filter(it -> event.equals(it.getEvent()))
-                .findFirst().isPresent();
-    }
-
-    public boolean hasTrackWithEvent(String event, String value) {
-        return tracks.stream()
-                .filter(it -> event.equals(it.getEvent()) && value.equals(it.getValue()))
-                .findFirst().isPresent();
-    }
-
     public long getDurationInSecond(){
-        List<Track> tmp = tracks.stream()
-                .filter(it -> includeInDuration(it))
-                .sorted((t1, t2) -> (int) (t1.getTimeToLong() - t2.getTimeToLong()))
-                .collect(Collectors.toList());
-        if (tmp.size() <= 1) {
-            return 0L;
-        } else {
-            return (tmp.get(tmp.size() - 1).getTimeToLong() - tmp.get(0).getTimeToLong()) / 1000;
-        }
+        return (endTimeMillis-startTimeMillis)/1000;
     }
 
-    private boolean includeInDuration(Track track) {
+    private boolean accept(Track track) {
         String event = track.getEvent();
         return "readstart".equals(event) || "scroll".equals(event)  || "g_one_tap_show".equals(event);
     }
 
     public void add(Track track) {
-        tracks.add(track);
-    }
-
-    public List<Track> getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(List<Track> tracks) {
-        this.tracks = tracks;
+        if (accept(track)){
+            long time = track.getTimeToLong();
+            if (endTimeMillis == 0 || startTimeMillis == 0){
+                startTimeMillis = endTimeMillis = time;
+            } else if (time < startTimeMillis){
+                startTimeMillis = time;
+            } else if (time > endTimeMillis) {
+                endTimeMillis = time;
+            }
+        }
     }
 
     public String getHitId() {

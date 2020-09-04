@@ -2,50 +2,41 @@ package com.wutsi.stats.viewers;
 
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.InputStreamIterator;
-import com.wutsi.stats.impl.AbstractDailySessionAggregator;
-import com.wutsi.stats.impl.Session;
+import com.wutsi.stats.Track;
+import com.wutsi.stats.impl.AbstractDailyAggregator;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static java.util.stream.Collectors.groupingBy;
-
-public class DailyViewersAggregator extends AbstractDailySessionAggregator {
+public class DailyViewersAggregator extends AbstractDailyAggregator<Viewer> {
     public DailyViewersAggregator (LocalDate date) {
         super(date);
     }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Session> sessions = this.getSessions(iterator);
-        List<Viewer> viewers = toViewers(sessions);
+        List<Viewer> viewers = loadItems(iterator);
         new ViewerWriter().write(viewers, output);
     }
 
     @Override
-    protected boolean isValidSession(Session session) {
-        return true;
+    protected void handleTrack(final Track track, final Map<String, Viewer> viewers) {
+        String key = track.getProductId();
+        Viewer viewer = viewers.get(key);
+        if (viewer == null){
+            viewers.put(key, new Viewer(date.toString(), track.getProductId(), 1));
+        } else {
+            viewer.setCount(viewer.getCount()+1);
+        }
     }
 
-    private List<Viewer> toViewers(List<Session> sessions) {
-        return sessions.stream()
-                .collect(groupingBy(Session::getProductId))
-                .values()
-                .stream()
-                .map(it -> toViewer(it))
-                .filter(it -> it != null)
-                .collect(Collectors.toList());
+    @Override
+    protected boolean isValidTrack(Track track) {
+        return  "page.read".equalsIgnoreCase(track.getPage()) &&
+                "readstart".equalsIgnoreCase(track.getEvent()) &&
+                !track.getBot() &&
+                isValidDate(track.getTime(), this.date);
     }
-
-    private Viewer toViewer(List<Session> sessions) {
-        Collection<List<Session>> viewers = sessions.stream()
-                .collect(groupingBy(Session::getHitId))
-                .values();
-
-        return viewers.isEmpty() ? null : new Viewer(this.date.toString(), sessions.get(0).getProductId(), viewers.size());
-    }
-
 }

@@ -1,7 +1,8 @@
-package com.wutsi.stats.impl;
+package com.wutsi.stats;
 
 import com.opencsv.bean.CsvBindByName;
 
+@Deprecated
 public class Track {
     @CsvBindByName(required = true)
     private String time;

@@ -2,50 +2,41 @@ package com.wutsi.stats.xread;
 
 import com.opencsv.exceptions.CsvException;
 import com.wutsi.stats.InputStreamIterator;
-import com.wutsi.stats.impl.AbstractDailySessionAggregator;
-import com.wutsi.stats.impl.Session;
-import com.wutsi.stats.impl.Track;
+import com.wutsi.stats.Track;
+import com.wutsi.stats.impl.AbstractDailyAggregator;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static java.util.stream.Collectors.groupingBy;
-
-public class DailyXReadAggregator extends AbstractDailySessionAggregator {
+public class DailyXReadAggregator  extends AbstractDailyAggregator<XRead> {
     public DailyXReadAggregator(LocalDate date) {
         super(date);
     }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Session> sessions = this.getSessions(iterator);
-        List<XRead> xreads = toXReads(sessions);
+        List<XRead> xreads = loadItems(iterator);
         new XReadWriter().write(xreads, output);
     }
 
     @Override
-    protected boolean isValidSession(Session session) {
-        return true;
+    protected boolean isValidTrack(final Track track) {
+        return  "page.read".equalsIgnoreCase(track.getPage()) &&
+                "xread".equalsIgnoreCase(track.getEvent()) &&
+                !track.getBot() &&
+                isValidDate(track.getTime(), this.date);
     }
 
-    private List<XRead> toXReads(List<Session> sessions) {
-        return sessions.stream()
-                .collect(groupingBy(Session::getProductId))
-                .values()
-                .stream()
-                .map(it -> toXRead(it))
-                .filter(it -> it != null)
-                .collect(Collectors.toList());
-    }
-
-    private XRead toXRead(List<Session> sessions) {
-        List<Track> xreads = sessions.stream()
-                .flatMap(it -> it.getTracks().stream())
-                .filter(it -> "xread".equals(it.getEvent()))
-                .collect(Collectors.toList());
-
-        return xreads.isEmpty() ? null : new XRead(this.date.toString(), sessions.get(0).getProductId(), xreads.size());
+    @Override
+    protected void handleTrack(final Track track, final Map<String, XRead> items) {
+        String key = track.getProductId();
+        XRead item = items.get(key);
+        if (item == null){
+            items.put(key, new XRead(date.toString(), track.getProductId(), 1));
+        } else {
+            item.setCount(item.getCount()+1);
+        }
     }
 }

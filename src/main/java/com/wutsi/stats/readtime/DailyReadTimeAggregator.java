@@ -19,14 +19,9 @@ public class DailyReadTimeAggregator extends AbstractDailySessionAggregator {
     }
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Session> sessions = this.getSessions(iterator);
+        List<Session> sessions = loadItems(iterator);
         List<ReadTime> readTimes = toReadTimes(sessions);
         new ReadTimeWriter().write(readTimes, output);
-    }
-
-    @Override
-    protected boolean isValidSession(Session session) {
-        return true;
     }
 
     private List<ReadTime> toReadTimes(List<Session> sessions) {
