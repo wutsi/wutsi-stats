@@ -1,9 +1,9 @@
-package com.wutsi.stats.share;
+package com.wutsi.stats.hit;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
-public class Share {
+public class Hit {
     @CsvBindByPosition(position = 0)
     @CsvBindByName(column = "time")
     private String date;
@@ -16,7 +16,7 @@ public class Share {
     @CsvBindByName(column = "count")
     private int count;
 
-    public Share(String date, String hitId, int count) {
+    public Hit(String date, String hitId, int count) {
         this.date = date;
         this.hitId = hitId;
         this.count = count;

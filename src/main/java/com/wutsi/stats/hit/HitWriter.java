@@ -1,10 +1,10 @@
-package com.wutsi.stats.share;
+package com.wutsi.stats.hit;
 import com.wutsi.stats.impl.AbstractWriter;
 
 import java.io.IOException;
 import java.io.Writer;
 
-public class ShareWriter extends AbstractWriter<Share> {
+public class HitWriter extends AbstractWriter<Hit> {
     @Override
     protected void writeHeader(Writer writer) throws IOException {
         writer.append("\"time\",\"hitid\",\"count\"\n");
