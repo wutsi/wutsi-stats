@@ -5,6 +5,7 @@ import com.wutsi.stats.Track;
 public class Session {
     private String hitId;
     private String productId;
+    private int maxScroll;
     private long startTimeMillis = 0;
     private long endTimeMillis = 0;
 
@@ -16,6 +17,8 @@ public class Session {
     public long getDurationInSecond(){
         return (endTimeMillis-startTimeMillis)/1000;
     }
+
+    public int getMaxScroll() { return maxScroll; }
 
     private boolean accept(Track track) {
         String event = track.getEvent();
@@ -31,6 +34,17 @@ public class Session {
                 startTimeMillis = time;
             } else if (time > endTimeMillis) {
                 endTimeMillis = time;
+            }
+
+            if ("scroll".equals(track.getEvent())){
+                try {
+                    int value = Integer.parseInt(track.getValue());
+                    if (value > maxScroll){
+                        maxScroll = value;
+                    }
+                } catch (Exception e) {
+
+                }
             }
         }
     }
@@ -50,4 +64,6 @@ public class Session {
     public void setProductId(String productId) {
         this.productId = productId;
     }
+
+
 }
