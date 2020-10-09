@@ -7,6 +7,6 @@ import java.io.Writer;
 public class HitWriter extends AbstractWriter<Hit> {
     @Override
     protected void writeHeader(Writer writer) throws IOException {
-        writer.append("\"time\",\"hitid\",\"deviceid\",\"userid\"\n");
+        writer.append("\"time\",\"hitid\",\"storyid\",\"deviceid\",\"userid\"\n");
     }
 }

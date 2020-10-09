@@ -13,15 +13,20 @@ public class Hit {
     private String hitId;
 
     @CsvBindByPosition(position = 2)
+    @CsvBindByName(column = "storyId")
+    private String storyId;
+
+    @CsvBindByPosition(position = 3)
     @CsvBindByName(column = "deviceid")
     private String deviceId;
 
-    @CsvBindByPosition(position = 3)
+    @CsvBindByPosition(position = 4)
     @CsvBindByName(column = "userid")
     private String userId;
 
-    public Hit(final long time, final String hitId, final String deviceId, final String userId) {
+    public Hit(final long time, final String hitId, final String storyId, final String deviceId, final String userId) {
         this.time = time;
+        this.storyId = storyId;
         this.hitId = hitId;
         this.deviceId = deviceId;
         this.userId = userId;
@@ -57,5 +62,13 @@ public class Hit {
 
     public void setUserId(final String userId) {
         this.userId = userId;
+    }
+
+    public String getStoryId() {
+        return storyId;
+    }
+
+    public void setStoryId(final String storyId) {
+        this.storyId = storyId;
     }
 }

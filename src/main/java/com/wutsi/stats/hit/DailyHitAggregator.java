@@ -26,7 +26,7 @@ public class DailyHitAggregator extends AbstractDailyAggregator<Hit> {
         String key = track.getHitId();
         Hit item = items.get(key);
         if (item == null){
-            items.put(key, new Hit(track.getTimeToLong(), track.getHitId(), track.getDeviceId(), track.getUserId()));
+            items.put(key, new Hit(track.getTimeToLong(), track.getHitId(), track.getProductId(), track.getDeviceId(), track.getUserId()));
         } else {
             String userId = track.getUserId();
             if (!isEmpty(userId) && isEmpty(item.getUserId())){
