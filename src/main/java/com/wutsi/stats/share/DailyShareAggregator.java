@@ -1,11 +1,11 @@
 package com.wutsi.stats.share;
 
 import com.wutsi.stats.Track;
-import com.wutsi.stats.hit.AbstractDailyHitAggregator;
+import com.wutsi.stats.hit.AbstractDailyHitSignalAggregator;
 
 import java.time.LocalDate;
 
-public class DailyShareAggregator extends AbstractDailyHitAggregator {
+public class DailyShareAggregator extends AbstractDailyHitSignalAggregator {
     public DailyShareAggregator(LocalDate date) {
         super(date);
     }

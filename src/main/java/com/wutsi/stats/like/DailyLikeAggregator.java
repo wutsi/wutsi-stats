@@ -1,11 +1,11 @@
 package com.wutsi.stats.like;
 
 import com.wutsi.stats.Track;
-import com.wutsi.stats.hit.AbstractDailyHitAggregator;
+import com.wutsi.stats.hit.AbstractDailyHitSignalAggregator;
 
 import java.time.LocalDate;
 
-public class DailyLikeAggregator extends AbstractDailyHitAggregator {
+public class DailyLikeAggregator extends AbstractDailyHitSignalAggregator {
     public DailyLikeAggregator(LocalDate date) {
         super(date);
     }

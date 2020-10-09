@@ -4,9 +4,9 @@ import com.wutsi.stats.impl.AbstractWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class HitWriter extends AbstractWriter<Hit> {
+public class HitSignalWriter extends AbstractWriter<HitSignal> {
     @Override
     protected void writeHeader(Writer writer) throws IOException {
-        writer.append("\"time\",\"hitid\",\"deviceid\",\"userid\"\n");
+        writer.append("\"time\",\"hitid\",\"count\"\n");
     }
 }

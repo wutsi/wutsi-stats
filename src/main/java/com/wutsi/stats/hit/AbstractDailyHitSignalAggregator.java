@@ -11,24 +11,24 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractDailyHitAggregator extends AbstractDailyAggregator<Hit> {
-    public AbstractDailyHitAggregator(LocalDate date) {
+public abstract class AbstractDailyHitSignalAggregator extends AbstractDailyAggregator<HitSignal> {
+    public AbstractDailyHitSignalAggregator(LocalDate date) {
         super(date);
     }
 
     abstract protected boolean isValidEvent(final Track track);
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
-        List<Hit> items = loadItems(iterator);
-        new HitWriter().write(items, output);
+        List<HitSignal> items = loadItems(iterator);
+        new HitSignalWriter().write(items, output);
     }
 
     @Override
-    protected void handleTrack(final Track track, final Map<String, Hit> items) {
+    protected void handleTrack(final Track track, final Map<String, HitSignal> items) {
         String key = track.getHitId();
-        Hit item = items.get(key);
+        HitSignal item = items.get(key);
         if (item == null){
-            items.put(key, new Hit(date.toString(), track.getHitId(), 1));
+            items.put(key, new HitSignal(date.toString(), track.getHitId(), 1));
         } else {
             item.setCount(item.getCount()+1);
         }

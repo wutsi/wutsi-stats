@@ -6,28 +6,33 @@ import com.opencsv.bean.CsvBindByPosition;
 public class Hit {
     @CsvBindByPosition(position = 0)
     @CsvBindByName(column = "time")
-    private String date;
+    private long time;
 
     @CsvBindByPosition(position = 1)
     @CsvBindByName(column = "hitid")
     private String hitId;
 
     @CsvBindByPosition(position = 2)
-    @CsvBindByName(column = "count")
-    private int count;
+    @CsvBindByName(column = "deviceid")
+    private String deviceId;
 
-    public Hit(String date, String hitId, int count) {
-        this.date = date;
+    @CsvBindByPosition(position = 3)
+    @CsvBindByName(column = "userid")
+    private String userId;
+
+    public Hit(final long time, final String hitId, final String deviceId, final String userId) {
+        this.time = time;
         this.hitId = hitId;
-        this.count = count;
+        this.deviceId = deviceId;
+        this.userId = userId;
     }
 
-    public String getDate() {
-        return date;
+    public long getTime() {
+        return time;
     }
 
-    public void setDate(final String date) {
-        this.date = date;
+    public void setTime(final long time) {
+        this.time = time;
     }
 
     public String getHitId() {
@@ -38,11 +43,19 @@ public class Hit {
         this.hitId = hitId;
     }
 
-    public int getCount() {
-        return count;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setCount(final int count) {
-        this.count = count;
+    public void setDeviceId(final String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
     }
 }
