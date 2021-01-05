@@ -16,7 +16,7 @@ public abstract class AbstractDailyHitSignalAggregator extends AbstractDailyAggr
         super(date);
     }
 
-    abstract protected boolean isValidEvent(final Track track);
+    protected abstract boolean isValidEvent(final Track track);
 
     public void aggregate(InputStreamIterator iterator, OutputStream output) throws IOException, CsvException {
         List<HitSignal> items = loadItems(iterator);

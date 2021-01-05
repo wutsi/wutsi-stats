@@ -12,8 +12,6 @@ public class DailyLikeAggregator extends AbstractDailyHitSignalAggregator {
 
     @Override
     protected boolean isValidEvent(final Track track) {
-        final String event = track.getEvent();
-
-        return event != null && "like".equals(event);
+        return "like".equals(track.getEvent());
     }
 }

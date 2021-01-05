@@ -12,8 +12,6 @@ public class DailyCommentAggregator extends AbstractDailyHitSignalAggregator {
 
     @Override
     protected boolean isValidEvent(final Track track) {
-        final String event = track.getEvent();
-
-        return event != null && "comment".equals(event);
+        return "comment".equals(track.getEvent());
     }
 }
