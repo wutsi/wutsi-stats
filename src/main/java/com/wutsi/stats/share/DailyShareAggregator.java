@@ -13,10 +13,6 @@ public class DailyShareAggregator extends AbstractDailyHitSignalAggregator {
     @Override
     protected boolean isValidEvent(final Track track) {
         final String event = track.getEvent();
-        final String value = track.getValue();
-
-        return event != null &&
-                event.startsWith("share-") ||
-                ("share".equals(event) && value != null && !value.isEmpty());
+        return event != null && event.startsWith("share-");
     }
 }
